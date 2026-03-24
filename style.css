@@ -1,0 +1,80 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(214, 201, 184);
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    padding: 50px;
+    min-height: 100vh;
+    height: fit-content;
+    width: 800px;
+    background-color: rgb(199, 176, 146);
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 30px;
+}
+
+.header {
+    margin: 0;
+}
+
+.add-book, .card-button, .card-button-remove {
+    font-family: inherit;
+    border-style: none;
+    padding: 10px 20px 10px 20px;
+    border-radius: 8px;
+    background-color: rgb(153, 136, 114);
+    font-weight: 900;
+}
+.card-button-remove {
+    background-color: rgb(228 22 22);
+    font-weight: 900;
+}
+.card-button-remove:hover {
+    background-color: rgb(179, 17, 17);
+    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.3)
+}
+.card-button-remove:active {
+    background-color: rgb(127, 11, 11);
+    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.3)
+}
+.add-book:hover, .card-button:hover {
+    background-color: rgb(118, 101, 79);
+    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.3)
+}
+.add-book:active, .card-button:active {
+    background-color: rgb(83, 71, 55);
+    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.3)
+}
+
+.book-hold {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill , minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.book-card {
+    background-color: rgb(219, 219, 219);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 5px 5px 3px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.book-card > p {
+    margin: 0;
+}
+.book-card :first-child {
+    font-weight: 800;
+    font-size: 25px;
+    text-align: center;
+}
