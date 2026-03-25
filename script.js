@@ -4,7 +4,7 @@ const addButt = document.querySelector(".add-book");
 const bookHold = document.querySelector(".book-hold");
 
 // the Card
-function createCard (title, author, pages, id, read) {
+function createCard (title, author, pages, read, id) {
     const card = document.createElement("div");
     card.classList.add("book-card");
 
@@ -24,7 +24,7 @@ function createCard (title, author, pages, id, read) {
     card_title.textContent += title;
     card_author.textContent = `Author : ${author}`;
     card_pages.textContent = `Pages : ${pages}`
-    card_read.textContent = `Read yet ? : ${read}`;
+    card_read.textContent = `Read status : ${read}`;
     card_id.textContent = `ID : ${id}`;
 
     card.appendChild(card_title);
@@ -35,24 +35,25 @@ function createCard (title, author, pages, id, read) {
     card.appendChild(card_read_button);
     card.appendChild(card_remove);
 
+    card_remove.addEventListener("click", () => {
+        card.remove();
+
+        myLibrary = myLibrary.filter(obj => obj.id !== id);
+        //console.log(myLibrary);
+    });
+    card_read_button.addEventListener("click", () => {
+        const book = myLibrary.find(obj => obj.id === id);
+
+        if (book.read === "unread") book.read = "reading";
+        else if (book.read === "reading") book.read = "read";
+        else if (book.read = "read") book.read = "unread";
+
+        card_read.textContent = `Read status : ${book.read}`
+
+    })
+
     return card;
 }
-
-
-const myLibrary = [];
-
-// the constructor
-// function makeBook (title, author, pages, id, read) {
-//     this.title = title;
-//     this.author = author;
-//     this.pages = pages;
-//     this.id = id;
-//     this.read = read;
-// }
-
-// const lib = [];
-// myLibrary.push({...new makeBook("oro", "boro", 100, 213, "yeah")})
-
 
 // The Add book form
 function layout_form() {
@@ -62,19 +63,26 @@ function layout_form() {
     form_title_label.textContent = " Title ";
     const form_title_input = document.createElement("input");
     form_title_input.type = "text";
+    form_title_input.required = true;
     form_title_input.placeholder = " Enter title ";
 
     const form_author_label = document.createElement("label");
     form_author_label.textContent = " Author ";
     const form_author_input = document.createElement("input");
     form_author_input.type = "text";
+    form_author_input.required = true;
     form_author_input.placeholder = " Enter author ";
 
     const form_pages_label = document.createElement("label");
     form_pages_label.textContent = " Pages ";
     const form_pages_input = document.createElement("input");
     form_pages_input.type = "number";
+    form_pages_input.required = true;
     form_pages_input.placeholder = " Enter pages ";
+
+    form_title_input.name = "title";
+    form_author_input.name = "author";
+    form_pages_input.name = "pages";
 
     const form_read_status = document.createElement("p");
     form_read_status.textContent = " Read status ";
@@ -82,6 +90,7 @@ function layout_form() {
     const read_label_unread = document.createElement("label");
     read_label_unread.textContent = "Unread";
     const read_input_unread = document.createElement("input");
+    read_input_unread.checked = true;
     read_input_unread.type = "radio";
     read_input_unread.name = "read_status";
     read_input_unread.value = "unread";
@@ -109,7 +118,6 @@ function layout_form() {
     radio_div.appendChild(read_label_read);
     radio_div.appendChild(read_input_read);
 
-
     const form_button_div = document.createElement("div");
     form_button_div.classList.add("form-button-div");
     const form_accept = document.createElement("button");
@@ -135,10 +143,78 @@ function layout_form() {
     return form;
 }
 
+// The constructor.
+function makeBook (title, author, pages, read, id) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    this.id = id;
+}
 
+// Default books.
+let myLibrary = [
+    {...new makeBook("Dune", "Frank Herbert", 412, "unread", crypto.randomUUID())},
+    {...new makeBook("The Hobbit", "J.R.R Tolkien", 310, "unread", crypto.randomUUID())}
+];
+// The page updates when reloading.
+for (let obj of myLibrary) {
+    const newCard = createCard(obj.title, obj.author, obj.pages, obj.read, obj.id);
+    bookHold.appendChild(newCard);
+}
+
+// The layout overlay
+function layout_overlay() {
+    const overlay = document.createElement("div");
+    overlay.classList.add("page-overlay");
+
+    const form = layout_form();
+    overlay.appendChild(form);
+
+    document.body.appendChild(overlay);
+    return overlay;
+}
+
+const overlay = layout_overlay();
 
 // function createCard (title, author, pages, id, read)
 addButt.addEventListener("click", () => {
-    // const newCard = createCard("Elden ring", "G.R.R martin", 290, 3421, "No");
-    bookHold.appendChild(layout_form());    
+    overlay.style.display = "flex";
+})
+
+const form = overlay.querySelector("form");
+
+// The sequence --- title, author, pages, read, id
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    
+    // FormData isn't a plain object by default so we have to use Object.fromEntries() for conversion.
+    const formData = new FormData(form)
+    const plainData = Object.fromEntries(formData);
+    const book_id = crypto.randomUUID();
+    // The spread is used to remove the "makeBook" label (The constructor isn't needed here the "plainData" can just be appended directly with id at the back.)
+    myLibrary.push({...new makeBook(plainData.title, plainData.author, plainData.pages, plainData.read_status, book_id)})
+
+    bookHold.innerHTML = "";
+
+    for(let obj of myLibrary) {
+        const newCard = createCard(obj.title, obj.author, obj.pages, obj.read, obj.id);
+        bookHold.appendChild(newCard);
+    }
+
+    overlay.style.display = "none";
+    form.reset()
+})
+
+overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+        overlay.style.display = "none";
+        form.reset();
+    }
+})
+
+const cancel_form = form.querySelector("button[type='button']")
+cancel_form.addEventListener("click", () => {
+        overlay.style.display = "none";
+        form.reset();
 })

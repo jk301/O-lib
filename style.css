@@ -73,6 +73,7 @@ body {
 }
 .book-card > p {
     margin: 0;
+    word-break:keep-all;
 }
 .book-card :first-child {
     font-weight: 800;
@@ -80,9 +81,13 @@ body {
     text-align: center;
     margin-bottom: 20px;
 }
-.book-card p {
+.book-card p:nth-child(2) {
     padding-left: 85px;
     text-indent: -85px;
+}
+.book-card p:nth-child(5) {
+    padding-left: 45px;
+    text-indent: -45px;
 }
 
 form {
@@ -91,7 +96,7 @@ form {
     align-items: center;
     gap: 10px;
     background-color: aliceblue;
-    padding: 20px;
+    padding: 20px 20px 30px 20px;
     border-radius: 10px;
     width: 300px;
 }
@@ -99,10 +104,11 @@ form > label, form > p {
     font-weight: 700;
 }
 form > p {
-    margin-bottom: 0;
+    margin: 0;
 }
 form > input {
     font-family: inherit;
+    width: 80%;
     border-style: none;
     padding: 15px;
     border-radius: 10px;
@@ -122,14 +128,12 @@ form > input {
     justify-content: space-between;
     margin-bottom: 20px;
 }
-
 .radio-div input[type="radio"] {
     accent-color: rgb(83, 71, 55);
     cursor: pointer;
     width: 15px;
     height: 15px;
 }
-
 .radio-div label {
     cursor: pointer;
     font-weight: 600;
@@ -138,4 +142,20 @@ form > input {
 .form-button-div {
     display: flex;
     gap: 20px;
+}
+.card-button {
+    margin-top: auto;
+}
+
+.page-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.6);
 }
