@@ -46,7 +46,8 @@ function createCard (title, author, pages, read, id) {
 
         if (book.read === "unread") book.read = "reading";
         else if (book.read === "reading") book.read = "read";
-        else if (book.read = "read") book.read = "unread";
+        else if (book.read === "read") book.read = "unread";
+        else if (book.read === undefined) book.read = "read"
 
         card_read.textContent = `Read status : ${book.read}`
 
@@ -210,6 +211,8 @@ overlay.addEventListener("click", (e) => {
     if (e.target === overlay) {
         overlay.style.display = "none";
         form.reset();
+        // reset() would also remove the checked attribute.
+        form.querySelector("input[value='unread']").checked = true;
     }
 })
 
@@ -217,4 +220,6 @@ const cancel_form = form.querySelector("button[type='button']")
 cancel_form.addEventListener("click", () => {
         overlay.style.display = "none";
         form.reset();
+        // reset() would also remove the checked attribute.
+        form.querySelector("input[value='unread']").checked = true;
 })
