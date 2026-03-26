@@ -19,9 +19,9 @@ function createCard (title, author, pages, read, id) {
     card_remove.classList.add("card-button-remove");
     const card_read_button = document.createElement("button");
     card_read_button.textContent = "change read status";
-    card_read_button.classList.add("card-button")
+    card_read_button.classList.add("card-button");
 
-    card_title.textContent += title;
+    card_title.textContent = title;
     card_author.textContent = `Author : ${author}`;
     card_pages.textContent = `Pages : ${pages}`
     card_read.textContent = `Read status : ${read}`;
@@ -47,12 +47,9 @@ function createCard (title, author, pages, read, id) {
         if (book.read === "unread") book.read = "reading";
         else if (book.read === "reading") book.read = "read";
         else if (book.read === "read") book.read = "unread";
-        else if (book.read === undefined) book.read = "read"
 
         card_read.textContent = `Read status : ${book.read}`
-
     })
-
     return card;
 }
 
@@ -61,18 +58,18 @@ function layout_form() {
     const form = document.createElement("form");
 
     const form_title_label = document.createElement("label");
-    form_title_label.textContent = " Title ";
+    form_title_label.textContent = "Title";
     const form_title_input = document.createElement("input");
     form_title_input.type = "text";
     form_title_input.required = true;
-    form_title_input.placeholder = " Enter title ";
+    form_title_input.placeholder = "Enter title";
 
     const form_author_label = document.createElement("label");
-    form_author_label.textContent = " Author ";
+    form_author_label.textContent = "Author";
     const form_author_input = document.createElement("input");
     form_author_input.type = "text";
     form_author_input.required = true;
-    form_author_input.placeholder = " Enter author ";
+    form_author_input.placeholder = "Enter author";
 
     const form_pages_label = document.createElement("label");
     form_pages_label.textContent = " Pages ";
@@ -86,7 +83,7 @@ function layout_form() {
     form_pages_input.name = "pages";
 
     const form_read_status = document.createElement("p");
-    form_read_status.textContent = " Read status ";
+    form_read_status.textContent = "Read status";
 
     const read_label_unread = document.createElement("label");
     read_label_unread.textContent = "Unread";
@@ -178,7 +175,6 @@ function layout_overlay() {
 
 const overlay = layout_overlay();
 
-// function createCard (title, author, pages, id, read)
 addButt.addEventListener("click", () => {
     overlay.style.display = "flex";
 })
@@ -187,14 +183,14 @@ const form = overlay.querySelector("form");
 
 // The sequence --- title, author, pages, read, id
 form.addEventListener("submit", (e) => {
-    e.preventDefault();
+    e.preventDefault(); // stops reloading the page.
     
     // FormData isn't a plain object by default so we have to use Object.fromEntries() for conversion.
-    const formData = new FormData(form)
+    const formData = new FormData(form);
     const plainData = Object.fromEntries(formData);
     const book_id = crypto.randomUUID();
     // The spread is used to remove the "makeBook" label (The constructor isn't needed here the "plainData" can just be appended directly with id at the back.)
-    myLibrary.push({...new makeBook(plainData.title, plainData.author, plainData.pages, plainData.read_status, book_id)})
+    myLibrary.push({...new makeBook(plainData.title, plainData.author, plainData.pages, plainData.read_status, book_id)});
 
     bookHold.innerHTML = "";
 
@@ -204,14 +200,16 @@ form.addEventListener("submit", (e) => {
     }
 
     overlay.style.display = "none";
-    form.reset()
+    form.reset();
+    // reset() would also remove the checked attribute.
+    form.querySelector("input[value='unread']").checked = true;
 })
 
 overlay.addEventListener("click", (e) => {
     if (e.target === overlay) {
         overlay.style.display = "none";
         form.reset();
-        // reset() would also remove the checked attribute.
+        // same here.
         form.querySelector("input[value='unread']").checked = true;
     }
 })
@@ -220,6 +218,6 @@ const cancel_form = form.querySelector("button[type='button']")
 cancel_form.addEventListener("click", () => {
         overlay.style.display = "none";
         form.reset();
-        // reset() would also remove the checked attribute.
+        // same here.
         form.querySelector("input[value='unread']").checked = true;
 })
